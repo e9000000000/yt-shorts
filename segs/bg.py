@@ -10,7 +10,7 @@ from . import youtube
 
 
 def upload(channel: models.Channel, clip: models.Clip):
-    now = timezone.now()
+    now = timezone.now().astimezone(timezone.get_current_timezone())
     try:
         youtube.upload(channel, clip)
         clip.uploaded_at = now
@@ -25,7 +25,7 @@ def upload(channel: models.Channel, clip: models.Clip):
 
 
 def upload_not_uploaded():
-    now = timezone.now()
+    now = timezone.now().astimezone(timezone.get_current_timezone())
 
     channels = models.Channel.objects.filter(upload_start_time__lte=now.time(), upload_end_time__gt=now.time())
     for c in channels:
