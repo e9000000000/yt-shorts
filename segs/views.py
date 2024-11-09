@@ -23,7 +23,7 @@ def index(request):
             full_video_path, video_hash = segments.save_tmp_file(full_video)
             t = threading.Thread(target=segments.make_clips, args=(form.cleaned_data["channel"], full_video_path, video_hash))
             t.start()
-            return render(request, "index.html", {"form": form.render()})
+            return render(request, "good.html")
         else:
             return render(request, "error.html", {"errors": form.errors.items()})
 
