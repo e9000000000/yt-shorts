@@ -129,6 +129,6 @@ MEDIA_ROOT = BASE_DIR / Path("media/")
 if not MEDIA_ROOT.exists():
     MEDIA_ROOT.mkdir()
 
-MEDIA_URL = "/mdeia/"
+MEDIA_URL = "/media/"
 
 HOST = "127.0.0.1"
