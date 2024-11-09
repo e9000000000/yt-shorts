@@ -210,6 +210,13 @@ def save_tmp_file(tmp) -> tuple[str]:
     return filename, filehash
 
 
+video_queue = []
+def add_video_into_queue(channel: models.Channel, video_path: str, video_hash: str):
+    global video_queue
+
+    video_queue.append((channel, video_path, video_hash))
+
+
 def make_clips(channel: models.Channel, video_path: str, video_hash: str):
     audio_path = os.path.join(settings.MEDIA_ROOT, f"{video_hash}.wav")
     video_subtitles_path = os.path.join(settings.MEDIA_ROOT, f"{video_hash}.json")

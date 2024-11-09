@@ -21,8 +21,7 @@ def index(request):
         if form.is_valid():
             full_video = form.cleaned_data["full_video"]
             full_video_path, video_hash = segments.save_tmp_file(full_video)
-            t = threading.Thread(target=segments.make_clips, args=(form.cleaned_data["channel"], full_video_path, video_hash))
-            t.start()
+            segments.add_video_into_queue(form.cleaned_data["channel"], full_video_path, video_hash)
             return render(request, "good.html")
         else:
             return render(request, "error.html", {"errors": form.errors.items()})

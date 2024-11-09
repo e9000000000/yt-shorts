@@ -7,6 +7,7 @@ from django.utils import timezone
 
 from . import models
 from . import youtube
+from . import segments
 
 
 def upload(channel: models.Channel, clip: models.Clip):
@@ -46,7 +47,7 @@ def upload_not_uploaded():
         upload(c, clip)
 
 
-def _execute():
+def _execute_uploading():
     while 1:
         try:
             upload_not_uploaded()
@@ -55,6 +56,19 @@ def _execute():
         time.sleep(60)
 
 
+def _execute_making_clips():
+    while 1:
+        if len(segments.video_queue) == 0:
+            time.sleep(60)
+            continue
+        try:
+            args = segments.video_queue.pop()
+            segments.make_clips(*args)
+        except:
+            traceback.print_exc()
+
+
 def execute():
-    t = threading.Thread(target=_execute)
+    t = threading.Thread(target=_execute_uploading)
+    t = threading.Thread(target=_execute_making_clips)
     t.start()
