@@ -1,0 +1,6 @@
+whisper-timestamped
+transformers
+django
+google-api-python-client
+google-auth-oauthlib
+google-auth-httplib2

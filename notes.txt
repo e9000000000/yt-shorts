@@ -1,0 +1,14 @@
+- better description
+  - use episode name and season number and episode number
+  - use ai to summarise video, and paste this into description
+
+
+- better highlight searching algorithm
+  - key frame extraction algorighm
+	- https://github.com/miteshkothari259/Video-Highlights-Generator
+    - https://onlinelibrary.wiley.com/doi/10.1155/2024/4725216
+  - by audio intense https://github.com/surajiitd/Automate_Video_Highlights_generation/blob/master/make_highlight_chunks.py
+  - https://github.com/qiuqiangkong/audioset_tagging_cnn
+
+- auto uploading
+  - https://developers.google.com/youtube/v3/docs/videos/insert
