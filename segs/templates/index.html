@@ -1,7 +1,9 @@
 <h1>upload stuff</h1>
+<a href="{% url 'index' %}">index</a>
+<a href="{% url 'auth' %}">auth</a>
 
 
-<form enctype="multipart/form-data" action="/" method="post">
+<form enctype="multipart/form-data" action="{% url 'index' %}" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Submit">

@@ -130,3 +130,5 @@ if not MEDIA_ROOT.exists():
     MEDIA_ROOT.mkdir()
 
 MEDIA_URL = "/mdeia/"
+
+HOST = "127.0.0.1"

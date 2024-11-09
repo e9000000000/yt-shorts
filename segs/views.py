@@ -1,14 +1,17 @@
 import threading
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.conf import settings
+
 
 from . import segments
 from . import forms
+from . import youtube
 
 
 def index(request):
     if not request.user or not request.user.is_authenticated:
-        return render(request, "error.html", {"errors": {"user": ["not authenticated"]}})
+        return render(request, "error.html", {"errors": [("user", ["not authenticated"])]})
 
     if request.method == "GET":
         form = forms.OneVideoForm()
@@ -23,3 +26,21 @@ def index(request):
             return render(request, "index.html", {"form": form.render()})
         else:
             return render(request, "error.html", {"errors": form.errors.items()})
+
+def yt_auth(request):
+    if not request.user or not request.user.is_authenticated:
+        return render(request, "error.html", {"errors": [("user", ["not authenticated"])]})
+
+    if request.method == "GET":
+        form = forms.YtAuthForm()
+        return render(request, "auth.html", {"form": form.render()})
+    elif request.method == "POST":
+        form = forms.YtAuthForm(request.POST)
+        if form.is_valid():
+            url = youtube.run_auth_server(form.cleaned_data["channel"])
+            if url:
+                return redirect(url)
+            return render(request, "error.html", {"errors": [("authError", "Token already exists")]})
+        else:
+            return render(request, "error.html", {"errors": form.errors.items()})
+
