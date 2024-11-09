@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.static import serve
 
 from segs import views
 
@@ -27,3 +28,10 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("auth/", views.yt_auth, name="auth"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if not settings.DEBUG:
+    urlpatterns += [
+        path(f'{settings.MEDIA_URL.lstrip("/")}<path:path>', serve, {
+            'document_root': settings.MEDIA_ROOT,
+        }),
+    ]
