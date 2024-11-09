@@ -34,4 +34,7 @@ if not settings.DEBUG:
         path(f'{settings.MEDIA_URL.lstrip("/")}<path:path>', serve, {
             'document_root': settings.MEDIA_ROOT,
         }),
+        path(f'{settings.STATIC_URL.lstrip("/")}<path:path>', serve, {
+            'document_root': settings.STATIC_ROOT,
+        }),
     ]
