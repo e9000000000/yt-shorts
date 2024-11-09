@@ -7,6 +7,9 @@ from . import forms
 
 
 def index(request):
+    if not request.user or not request.user.is_authenticated:
+        return render(request, "error.html", {"errors": {"user": ["not authenticated"]}})
+
     if request.method == "GET":
         form = forms.OneVideoForm()
         return render(request, "index.html", {"form": form.render()})
