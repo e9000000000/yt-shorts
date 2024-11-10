@@ -70,5 +70,7 @@ def _execute_making_clips():
 
 def execute():
     t = threading.Thread(target=_execute_uploading)
+    t.start()
+
     t = threading.Thread(target=_execute_making_clips)
     t.start()
