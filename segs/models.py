@@ -32,5 +32,13 @@ class Clip(models.Model):
     uploaded_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def is_uploaded(self):
+        return bool(self.uploaded_at)
+    is_uploaded.boolean = True
+
+    def is_error(self):
+        return bool(self.error)
+    is_error.boolean = True
+
     def __str__(self):
         return f"{self.channel} {self.video} {self.created_at}"
