@@ -1,8 +1,3 @@
-- use templates/base.html
-- upload multiple files once
-- stats page
-
-
 - better description
   - use episode name and season number and episode number
   - use ai to summarise video, and paste this into description

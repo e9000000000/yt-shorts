@@ -6,41 +6,103 @@
 <form id="uploadForm">
     {% csrf_token %}
     {{ form }}
-    <button type="button" onclick="uploadFile()">Upload Video</button>
+    <button type="button" onclick="uploadFiles()">Upload Video</button>
 </form>
-<progress id="progressBar" value="0" max="100" style="width: 100%; display: none;"></progress>
-<div id="progressText"></div>
+<div id="drop-area">
+    <p>Drag & Drop files here or click to upload</p>
+    <input type="file" id="fileElem" multiple style="display:none">
+</div>
 
 <script>
-    function uploadFile() {
+    document.getElementById("id_full_video").style.display = 'none'
+    const dropArea = document.getElementById("drop-area");
+    const fileElem = document.getElementById("fileElem");
+    let filesToUpload = [];
+
+    // Highlight drop area when a file is dragged over it
+    ["dragenter", "dragover"].forEach(eventName => {
+        dropArea.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropArea.classList.add("highlight");
+        });
+    });
+
+    ["dragleave", "drop"].forEach(eventName => {
+        dropArea.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropArea.classList.remove("highlight");
+        });
+    });
+
+    // Handle dropped files
+    dropArea.addEventListener("drop", (e) => {
+        const dt = e.dataTransfer;
+        handleFiles(dt.files);
+    });
+
+    // Open file input dialog if user clicks the drop area
+    dropArea.addEventListener("click", () => fileElem.click());
+
+    // Handle files chosen through the file input dialog
+    fileElem.addEventListener("change", (e) => handleFiles(e.target.files));
+
+    function handleFiles(files) {
+        filesToUpload = [...filesToUpload, ...files];
+        showFiles(filesToUpload);
+    }
+
+    function showFiles(files) {
+        dropArea.innerHTML = `<p>${files.length} file(s) selected</p>`;
+    }
+
+
+    function uploadFiles() {
+        for (let i in filesToUpload) {
+            uploadFile(+i+1, filesToUpload[i]);
+        }
+
+        filesToUpload = []
+        showFiles(filesToUpload)
+    }
+
+    function uploadFile(number, file) {
+        console.log(number)
         const form = document.getElementById("uploadForm");
-        const progressBar = document.getElementById("progressBar");
-        const progressText = document.getElementById("progressText");
+
+        const progressDiv = document.createElement('div')
+        progressDiv.classList.add("progressbar")
+        progressDiv.innerHTML =`<div></div><progress value="0" max="100" style="width: 50%;"></progress>`
+        document.body.appendChild(progressDiv)
+
+        const progressBar = progressDiv.querySelector("progress");
+        const progressText = progressDiv.querySelector("div");
 
         const formData = new FormData(form);
+        formData.set("full_video", file)
         const xhr = new XMLHttpRequest();
-
-        // Show progress bar
-        progressBar.style.display = "block";
 
         // Update progress bar on progress event
         xhr.upload.addEventListener("progress", (event) => {
             if (event.lengthComputable) {
                 const percentComplete = (event.loaded / event.total) * 100;
                 progressBar.value = percentComplete;
-                progressText.textContent = `Uploading: ${Math.round(percentComplete)}%`;
+                progressText.textContent = `${number}: Uploading: ${Math.round(percentComplete)}%`;
             }
         });
 
         // Handle upload completion
         xhr.addEventListener("load", () => {
-            progressText.textContent = "Upload complete!";
+            progressText.textContent = `${number}: Upload complete!`;
             progressBar.value = 100;
+            setTimeout(() => {progressDiv.remove()}, 3000)
         });
 
         // Handle upload errors
         xhr.addEventListener("error", () => {
-            progressText.textContent = "Upload failed. Please try again.";
+            progressText.textContent = `${number}: Upload failed. Please try again.`;
+            setTimeout(() => {progressDiv.remove()}, 3000)
         });
 
         // Configure and send the request
@@ -48,4 +110,22 @@
         xhr.send(formData);
     }
 </script>
+<style>
+    #drop-area {
+        border: 2px dashed #cccccc;
+        padding: 20px;
+        text-align: center;
+        width: 300px;
+        margin: 20px auto;
+        color: #cccccc;
+    }
+    #drop-area.highlight {
+        border-color: #666666;
+    }
+
+    .progressbar {
+        display: flex;
+        gap: 10px;
+    }
+</style>
 {% endblock %}
