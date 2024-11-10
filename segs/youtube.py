@@ -87,7 +87,5 @@ def upload(channel: models.Channel, clip: models.Clip):
         media_body=media_file,
     )
 
-    response = None
-    while response is None:
-        status, response = request.next_chunk()
-    print(status, response)
+    response = request.execute()
+    print(response)
