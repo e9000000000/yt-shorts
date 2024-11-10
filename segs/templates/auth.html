@@ -1,10 +1,11 @@
-<h1>auth</h1>
-<a href="{% url 'index' %}">index</a>
-<a href="{% url 'auth' %}">auth</a>
+{% extends 'base.html' %}
 
+{% block title %}Auth{% endblock %}
 
+{% block content %}
 <form enctype="multipart/form-data" action="{% url 'auth' %}" method="post" target="_blank">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Go auth">
 </form>
+{% endblock %}

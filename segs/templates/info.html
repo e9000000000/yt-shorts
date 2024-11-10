@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Info{% endblock %}
+
+{% block content %}
+{% for row in info %}
+    <p>{{ row }}</p>
+{% endfor %}
+{% endblock %}

@@ -1,59 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload with Progress</title>
-</head>
-<body>
-    <h1>upload stuff</h1>
-    <a href="{% url 'index' %}">index</a>
-    <a href="{% url 'auth' %}">auth</a>
+{% extends 'base.html' %}
 
-    <form id="uploadForm">
-        {% csrf_token %}
-        {{ form }}
-        <button type="button" onclick="uploadFile()">Upload Video</button>
-    </form>
-    <progress id="progressBar" value="0" max="100" style="width: 100%; display: none;"></progress>
-    <div id="progressText"></div>
+{% block title %}Shorts{% endblock %}
 
-    <script>
-        function uploadFile() {
-            const form = document.getElementById("uploadForm");
-            const progressBar = document.getElementById("progressBar");
-            const progressText = document.getElementById("progressText");
+{% block content %}
+<form id="uploadForm">
+    {% csrf_token %}
+    {{ form }}
+    <button type="button" onclick="uploadFile()">Upload Video</button>
+</form>
+<progress id="progressBar" value="0" max="100" style="width: 100%; display: none;"></progress>
+<div id="progressText"></div>
 
-            const formData = new FormData(form);
-            const xhr = new XMLHttpRequest();
+<script>
+    function uploadFile() {
+        const form = document.getElementById("uploadForm");
+        const progressBar = document.getElementById("progressBar");
+        const progressText = document.getElementById("progressText");
 
-            // Show progress bar
-            progressBar.style.display = "block";
+        const formData = new FormData(form);
+        const xhr = new XMLHttpRequest();
 
-            // Update progress bar on progress event
-            xhr.upload.addEventListener("progress", (event) => {
-                if (event.lengthComputable) {
-                    const percentComplete = (event.loaded / event.total) * 100;
-                    progressBar.value = percentComplete;
-                    progressText.textContent = `Uploading: ${Math.round(percentComplete)}%`;
-                }
-            });
+        // Show progress bar
+        progressBar.style.display = "block";
 
-            // Handle upload completion
-            xhr.addEventListener("load", () => {
-                progressText.textContent = "Upload complete!";
-                progressBar.value = 100;
-            });
+        // Update progress bar on progress event
+        xhr.upload.addEventListener("progress", (event) => {
+            if (event.lengthComputable) {
+                const percentComplete = (event.loaded / event.total) * 100;
+                progressBar.value = percentComplete;
+                progressText.textContent = `Uploading: ${Math.round(percentComplete)}%`;
+            }
+        });
 
-            // Handle upload errors
-            xhr.addEventListener("error", () => {
-                progressText.textContent = "Upload failed. Please try again.";
-            });
+        // Handle upload completion
+        xhr.addEventListener("load", () => {
+            progressText.textContent = "Upload complete!";
+            progressBar.value = 100;
+        });
 
-            // Configure and send the request
-            xhr.open("POST", "{% url 'index' %}");
-            xhr.send(formData);
-        }
-    </script>
-</body>
-</html>
+        // Handle upload errors
+        xhr.addEventListener("error", () => {
+            progressText.textContent = "Upload failed. Please try again.";
+        });
+
+        // Configure and send the request
+        xhr.open("POST", "{% url 'index' %}");
+        xhr.send(formData);
+    }
+</script>
+{% endblock %}

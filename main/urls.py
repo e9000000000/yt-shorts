@@ -24,9 +24,10 @@ from django.views.static import serve
 from segs import views
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
     path("", views.index, name="index"),
     path("auth/", views.yt_auth, name="auth"),
+    path("stats/", views.stats, name="stats"),
+    path("admin/", admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if not settings.DEBUG:

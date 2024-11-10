@@ -28,6 +28,7 @@ class Clip(models.Model):
     description = models.TextField()
     tags = models.CharField(max_length=500)
     video = models.FileField()
+    error = models.TextField(null=True, blank=True)
     uploaded_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
