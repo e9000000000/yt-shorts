@@ -68,6 +68,9 @@ def run_auth_server(channel: models.Channel) -> str | None:
 
 
 def upload(channel: models.Channel, clip: models.Clip):
+    clip.refresh_from_db()
+    assert clip.uploaded_at is None
+
     client = get_client(channel)
 
     media_file = MediaFileUpload(clip.video.path, chunksize=-1, resumable=True)
@@ -87,5 +90,7 @@ def upload(channel: models.Channel, clip: models.Clip):
         media_body=media_file,
     )
 
+    clip.refresh_from_db()
+    assert clip.uploaded_at is None
     response = request.execute()
     print(response)

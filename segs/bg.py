@@ -14,15 +14,14 @@ def upload(channel: models.Channel, clip: models.Clip):
     now = timezone.now().astimezone(timezone.get_current_timezone())
     try:
         youtube.upload(channel, clip)
-        clip.uploaded_at = now
         clip.error = None
-        clip.save()
     except:
         error = traceback.format_exc()
-        clip.uploaded_at = now
         clip.error = error
-        clip.save()
         print(error)
+
+    clip.uploaded_at = now
+    clip.save()
 
 
 def upload_not_uploaded():
