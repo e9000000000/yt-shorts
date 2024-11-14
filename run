@@ -1,4 +1,4 @@
 #!/bin/sh
 python3 manage.py migrate --settings=main.prod_settings &&
 python3 manage.py collectstatic --noinput --settings=main.prod_settings &&
-python3 manage.py runserver 0.0.0.0:8000 --settings=main.prod_settings
+python3 -u manage.py runserver 0.0.0.0:8000 --settings=main.prod_settings

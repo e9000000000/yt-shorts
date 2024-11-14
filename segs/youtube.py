@@ -72,7 +72,7 @@ def upload(channel: models.Channel, clip: models.Clip):
 
     client = get_client(channel)
 
-    media_file = MediaFileUpload(clip.video.path, chunksize=-1, resumable=True)
+    media_file = MediaFileUpload(clip.video.path)
     request = client.videos().insert(
         part="snippet,status",
         body={
